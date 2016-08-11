@@ -1,1 +1,1 @@
-# Jchart
+# JChart
