@@ -29,11 +29,11 @@ jc2.makeBar('result/Hbar2', orderBy='v', reverse=True)
 
 结果  
 result/Hbar.jpg  
-![](http://o8qs2v45f.bkt.clouddn.com/JChart/Hbar.jpg)  
+![](http://o8qs2v45f.bkt.clouddn.com/result/Hbar.jpg)  
 result/Vbar.jpg  
-![](http://o8qs2v45f.bkt.clouddn.com/JChart/Vbar.jpg)  
+![](http://o8qs2v45f.bkt.clouddn.com/result/Vbar.jpg)  
 result/Hbar2.jpg  
-![](http://o8qs2v45f.bkt.clouddn.com/JChart/Hbar2.jpg)  
+![](http://o8qs2v45f.bkt.clouddn.com/result/Hbar2.jpg)  
 ## 说明
 ### `JChart.JChart`  
 #### `JChart.JChart(data, options=None)`  
