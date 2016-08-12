@@ -88,9 +88,6 @@ ENV/
 # Rope project settings
 .ropeproject
 .idea/
-test.jpg
-test2.jpg
-test3.jpg
-testa.jpg
+result/
 testfile.py
 msyh.ttc
