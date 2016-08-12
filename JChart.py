@@ -20,10 +20,10 @@ _barHeight = 15
 _spacingForH = 30
 _maxLineWidth = 300
 # for vertical bar chart
-_picHeight = 500
+_picHeight = 600
 _barWidth = 15
-_spacingForV = 30
-_maxLineHeight = 300
+_spacingForV = 60
+_maxLineHeight = 400
 
 
 class JChart:
@@ -51,44 +51,58 @@ class JChart:
     def _createBackground(self, width, height):
         return Image.new("RGB", (width, height), self._backgroundColor)
 
-    def _getHeight(self):
+    def _makeBar(self, saveName, data, isHorizontal):
         """
-        calculate and return the height for horizontal bar chart
-        :return: int, height of pic
-        """
-        return (_barHeight + _spacingForH) * (self._number + 1) + _titleHeight
-
-    def _makeHBar(self, saveName, data):
-        """
-        make picture of horizontal bar chart
-        :param saveName: str
+        make bar chart picture
+        :type saveName: str
+        :type isHorizontal: bool
         :return: None
         """
-        picHeight = self._getHeight()
-        whole = self._createBackground(_picWidth, picHeight)
-        startWidth = 150
-        startHeight = 70
+        picWidth = _picWidth
+        picHeight = _picHeight
+        if isHorizontal:
+            picHeight = (_barHeight + _spacingForH) * (self._number + 1)
+            startWidth = 150
+            startHeight = 40
+            maxLength = _maxLineWidth
+            getEndPos = lambda pos, length: (pos[0] + length, pos[1] + _barHeight)
+            updateStartPos = lambda pos: (pos[0], pos[1] + _barHeight + _spacingForH)
+            getNoPos = lambda w, h: (20, h - 5)
+            getKeyPos = lambda w, h: (50, h - 10)
+            getValuePos = lambda w, h:(50, h + 10)
+        else:
+            picWidth = (_barWidth + _spacingForV) * (self._number + 1)
+            startWidth = 50
+            startHeight = 470
+            maxLength = _maxLineHeight
+            getEndPos = lambda pos, length: (pos[0] + _barWidth, pos[1] - length)
+            updateStartPos = lambda pos: (pos[0] + _barWidth + _spacingForV, pos[1])
+            getNoPos = lambda w, h: (w + 5, 550)
+            getKeyPos = lambda w, h: (w - 10, 500)
+            getValuePos = lambda w, h: (w - 10, 520)
+        whole = self._createBackground(picWidth, picHeight)
         draw = ImageDraw.Draw(whole)
         index = 1
         for key, value in data.items():
-            itemWidth = int(_maxLineWidth * value / self._maxVal) or 1
+            itemLength = int(maxLength * value / self._maxVal) or 1
             startPos = (startWidth, startHeight)
-            endPos = (startWidth+itemWidth, startHeight+_barHeight)
+            endPos = getEndPos(startPos, itemLength)
             draw.rectangle([startPos, endPos], fill=self._barColor, outline=_colorWhite)
-            draw.text((20, startHeight-5), str(index), font=_fontNo, fill=self._noColor)
-            draw.text((50, startHeight-10), str(key), font=_fontKey, fill=self._keyColor)
-            draw.text((50, startHeight+10), str(value), font=_fontValue, fill=self._valueColor)
-            startHeight += _barHeight + _spacingForH
+            draw.text(getNoPos(startWidth, startHeight), str(index), font=_fontNo, fill=self._noColor)
+            draw.text(getKeyPos(startWidth, startHeight), str(key), font=_fontKey, fill=self._keyColor)
+            draw.text(getValuePos(startWidth, startHeight), str(value), font=_fontValue, fill=self._valueColor)
+            startWidth, startHeight = updateStartPos(startPos)
             index += 1
         del draw
         whole.save(saveName)
 
-    def makeHBar(self, saveName, orderBy='none', reverse=False):
+    def makeBar(self, saveName, orderBy='none', reverse=False, isHorizontal=True):
         """
-        make picture of horizontal bar chart
-        :param saveName: str
+        make bar chart picture
+        :type saveName: str
+        :type reverse: bool
+        :type isHorizontal: bool
         :param orderBy: str, 'k' or 'v'
-        :param reverse: bool
         :return: None
         """
         if orderBy != 'k' and orderBy != 'v':
@@ -100,5 +114,5 @@ class JChart:
         if path.splitext(saveName)[1] == '':
             saveName += '.jpg'
 
-        self._makeHBar(saveName, data)
+        self._makeBar(saveName, data, isHorizontal)
         print('picture saved as %s' % saveName)
