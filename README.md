@@ -7,7 +7,7 @@
 PS：如果你的系统里没有simhei.ttf字体的话，请在JChart.py同目录里放置一个simhei.ttf文件或者把`_fontname`改为已有的字体
 ## 使用
 ### 例子
-```
+```python
 import JChart
 
 data={
